@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Dashboard | Image Printers</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1.5rem;
+    }
+    th, td {
+      padding: 0.75rem;
+      border: 1px solid var(--border);
+      text-align: left;
+    }
+    th {
+      background: var(--card-bg);
+    }
+  </style>
+</head>
+<body>
+  <div style="padding: 2rem; max-width: 1200px; margin: 0 auto;">
+    <h1>Image Printers Admin Panel</h1>
+    <p style="color: var(--gray-text);">Live customer incoming printing orders.</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Order ID</th>
+          <th>Customer</th>
+          <th>Phone</th>
+          <th>Service</th>
+          <th>Qty</th>
+          <th>Status</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody id="adminTableBody"></tbody>
+    </table>
+  </div>
+
+  <script>
+    async function loadAdminOrders() {
+      const res = await fetch('/api/admin/orders');
+      const orders = await res.json();
+      const tbody = document.getElementById('adminTableBody');
+      tbody.innerHTML = orders.map(o => `
+        <tr>
+          <td><strong>${o.id}</strong></td>
+          <td>${o.customerName}</td>
+          <td>${o.phone}</td>
+          <td>${o.service}</td>
+          <td>${o.quantity}</td>
+          <td><span style="color: var(--cyan);">${o.status}</span></td>
+          <td>${o.date}</td>
+        </tr>
+      `).join('');
+    }
+    loadAdminOrders();
+  </script>
+</body>
+</html>
